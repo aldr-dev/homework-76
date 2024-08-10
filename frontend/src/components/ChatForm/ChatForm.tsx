@@ -2,10 +2,10 @@ import {Box, Grid, TextField} from '@mui/material';
 import {LoadingButton} from '@mui/lab';
 import SendIcon from '@mui/icons-material/Send';
 import React, {useState} from 'react';
-import {ChatFormField} from '../../types';
+import {MessageForm} from '../../types';
 
 const ChatForm = () => {
-  const [chatData, setChatData] = useState<ChatFormField>({
+  const [chatData, setChatData] = useState<MessageForm>({
     author: '',
     message: '',
   });
