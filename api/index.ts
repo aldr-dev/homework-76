@@ -1,5 +1,6 @@
 import express from 'express';
 import cors, {CorsOptions} from 'cors';
+import chatDb from './chatDb';
 
 const app = express();
 const port = 8000;
@@ -18,6 +19,13 @@ const corsOptions: CorsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-app.listen(port, () => {
-  console.log(`Server running at http://127.0.0.1:${port}`);
-});
+const run = async () => {
+  await chatDb.init();
+
+  app.listen(port, () => {
+    console.log(`Server running at http://127.0.0.1:${port}`);
+  });
+};
+
+run().catch(console.error);
+
