@@ -3,12 +3,18 @@ import {LoadingButton} from '@mui/lab';
 import SendIcon from '@mui/icons-material/Send';
 import React, {useState} from 'react';
 import {MessageForm} from '../../types';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
+import {postMessageData} from '../../store/chatThunks';
+import {toast} from 'react-toastify';
+import {selectPostIsLoading} from '../../store/chatSlice';
 
 const ChatForm = () => {
   const [chatData, setChatData] = useState<MessageForm>({
     author: '',
     message: '',
   });
+  const dispatch = useAppDispatch();
+  const postIsLoading = useAppSelector(selectPostIsLoading);
 
   const onFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
@@ -18,11 +24,23 @@ const ChatForm = () => {
     }));
   };
 
-  const onSubmitForm = (event: React.FormEvent) => {
-    event.preventDefault();
+  const onSubmitForm = async (event: React.FormEvent) => {
+    try {
+      event.preventDefault();
 
-    if (chatData.author.trim().length !== 0 && chatData.message.trim().length !== 0) {
+      if (chatData.author.trim().length !== 0 && chatData.message.trim().length !== 0) {
+        await dispatch(postMessageData(chatData)).unwrap();
 
+        setChatData({
+          author: '',
+          message: '',
+        });
+
+        toast.success('Сообщение было успешно отправлено.');
+      }
+    } catch (error) {
+      console.error(error + 'Произошла ошибка при отправке запроса, попробуйте позже.');
+      toast.error('Произошла ошибка при отправке запроса, попробуйте позже.');
     }
   };
 
@@ -59,6 +77,7 @@ const ChatForm = () => {
             sx={{height: '43px'}}
             type="submit"
             color="primary"
+            loading={postIsLoading}
             loadingPosition="start"
             variant="contained"
             startIcon={<SendIcon/>}>

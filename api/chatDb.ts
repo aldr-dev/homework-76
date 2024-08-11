@@ -27,7 +27,7 @@ const chatDb = {
     return newMessage;
   },
   async save() {
-    return fs.writeFile(fileName, JSON.stringify(data));
+    return fs.writeFile(fileName, JSON.stringify(data, null, 2));
   }
 };
 

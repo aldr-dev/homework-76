@@ -1,6 +1,7 @@
 import express from 'express';
 import cors, {CorsOptions} from 'cors';
 import chatDb from './chatDb';
+import chatRouter from './routers/chat';
 
 const app = express();
 const port = 8000;
@@ -8,7 +9,7 @@ const port = 8000;
 const whitelist = ['http://localhost:5173'];
 const corsOptions: CorsOptions = {
   origin: (origin, callback) => {
-    if (origin && whitelist.indexOf(origin) !== -1) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -18,6 +19,7 @@ const corsOptions: CorsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use('/messages', chatRouter);
 
 const run = async () => {
   await chatDb.init();
