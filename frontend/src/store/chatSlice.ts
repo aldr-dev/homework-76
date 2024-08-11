@@ -53,8 +53,8 @@ export const chatSlice = createSlice({
     builder.addCase(fetchLastMessageData.fulfilled, (state, {payload: lastDateData}) => {
       state.getLastIsLoading = false;
       if (lastDateData.length !== 0) {
-        state.messageData.push(lastDateData[0]);
-        state.datetime = lastDateData[0].datetime;
+        state.messageData.push(...lastDateData);
+        state.datetime = lastDateData[lastDateData.length - 1].datetime;
       }
     });
     builder.addCase(fetchLastMessageData.rejected, (state) => {
