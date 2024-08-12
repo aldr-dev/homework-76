@@ -1,5 +1,5 @@
 import express from 'express';
-import {Message, MessageData} from '../types';
+import {Message} from '../types';
 import chatDb from '../chatDb';
 
 const chatRouter = express.Router();
